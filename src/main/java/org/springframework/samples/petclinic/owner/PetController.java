@@ -18,6 +18,7 @@ package org.springframework.samples.petclinic.owner;
 import java.time.LocalDate;
 import java.util.Collection;
 
+import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -53,6 +54,7 @@ class PetController {
 	public Collection<PetType> populatePetTypes() {
 		return this.owners.findPetTypes();
 	}
+
 
 	@ModelAttribute("owner")
 	public Owner findOwner(@PathVariable("ownerId") int ownerId) {

@@ -53,5 +53,13 @@
       <span th:unless="${currentPage < totalPages}" title="Last" class="fa fa-fast-forward"></span>
     </span>
 </div>
+
+<form th:object="${owner}" th:action="@{/owners}" method="get"
+      class="form-horizontal" id="search-owner-form">
+  <a class="btn btn-primary" th:href="@{/owners/new}">Add Vet</a>
+
+  <a class="btn btn-primary" th:href="@{/owners/new}">Add Speciality</a>
+
+</form>
 </body>
 </html>
