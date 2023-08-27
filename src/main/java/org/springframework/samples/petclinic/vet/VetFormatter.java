@@ -31,4 +31,5 @@ public class VetFormatter implements Formatter<Vet> {
 		}
 		throw new ParseException("type not found: " + text, 0);
 	}
+
 }

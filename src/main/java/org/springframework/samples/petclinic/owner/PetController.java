@@ -55,7 +55,6 @@ class PetController {
 		return this.owners.findPetTypes();
 	}
 
-
 	@ModelAttribute("owner")
 	public Owner findOwner(@PathVariable("ownerId") int ownerId) {
 

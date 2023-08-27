@@ -15,16 +15,19 @@
  */
 package org.springframework.samples.petclinic.vet;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.samples.petclinic.owner.Owner;
+import org.springframework.samples.petclinic.owner.Pet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author Juergen Hoeller
@@ -35,14 +38,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 class VetController {
 
-	private final VetRepository vetRepository;
+	private final VetRepository vets;
 
-	public VetController(VetRepository clinicService) {
-		this.vetRepository = clinicService;
+	public VetController(VetRepository vets) {
+		this.vets = vets;
+	}
+
+	@ModelAttribute("vet")
+	public Vet findOwner(@PathVariable(name = "vetId", required = false) Integer vetId) {
+		return vetId == null ? new Vet() : this.vets.findById(vetId).isPresent() ? this.vets.findById(vetId).get() : null;
 	}
 
 	@GetMapping("/vets.html")
 	public String showVetList(@RequestParam(defaultValue = "1") int page, Model model) {
+		System.out.println("page: " + page);
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects so it is simpler for Object-Xml mapping
 		Vets vets = new Vets();
@@ -57,22 +66,37 @@ class VetController {
 		model.addAttribute("totalPages", paginated.getTotalPages());
 		model.addAttribute("totalItems", paginated.getTotalElements());
 		model.addAttribute("listVets", listVets);
+		model.addAttribute("vetId", 1);
 		return "vets/vetList";
 	}
 
 	private Page<Vet> findPaginated(int page) {
 		int pageSize = 5;
 		Pageable pageable = PageRequest.of(page - 1, pageSize);
-		return vetRepository.findAll(pageable);
+		return vets.findAll(pageable);
 	}
 
 	@GetMapping({ "/vets" })
 	public @ResponseBody Vets showResourcesVetList() {
+		System.out.println("showResourcesVetList");
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects so it is simpler for JSon/Object mapping
 		Vets vets = new Vets();
-		vets.getVetList().addAll(this.vetRepository.findAll());
+		vets.getVetList().addAll(this.vets.findAll());
 		return vets;
+	}
+
+	/**
+	 * Custom handler for displaying an owner.
+	 * @param vetId the ID of the vet to display
+	 * @return a ModelMap with the model attributes for the view
+	 */
+	@GetMapping("/vets/{vetId}")
+	public ModelAndView showOwner(@PathVariable("vetId") int vetId) {
+		ModelAndView mav = new ModelAndView("vets/vetDetails");
+		Vet vet = this.vets.findById(vetId).orElse(null);
+		mav.addObject(vet);
+		return mav;
 	}
 
 }

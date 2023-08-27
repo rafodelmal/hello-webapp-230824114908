@@ -45,7 +45,6 @@ public class Visit extends BaseEntity {
 	@JoinColumn(name = "vet_id")
 	private Vet vet;
 
-
 	/**
 	 * Creates a new instance of Visit for the current date
 	 */
@@ -76,4 +75,5 @@ public class Visit extends BaseEntity {
 	public void setVet(Vet vet) {
 		this.vet = vet;
 	}
+
 }

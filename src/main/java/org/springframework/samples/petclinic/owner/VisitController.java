@@ -20,7 +20,6 @@ import java.util.Map;
 
 import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetRepository;
-import org.springframework.samples.petclinic.vet.Vets;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -43,6 +42,7 @@ import jakarta.validation.Valid;
 class VisitController {
 
 	private final OwnerRepository owners;
+
 	private final VetRepository vets;
 
 	public VisitController(OwnerRepository owners, VetRepository vets) {
@@ -76,13 +76,11 @@ class VisitController {
 		return visit;
 	}
 
-
 	@ModelAttribute("vets")
 	public Collection<Vet> loadVets() {
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		return this.vets.findAll();
 	}
-
 
 	// Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is
 	// called
