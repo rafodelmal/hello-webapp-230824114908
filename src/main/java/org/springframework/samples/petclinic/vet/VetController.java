@@ -46,7 +46,8 @@ class VetController {
 
 	@ModelAttribute("vet")
 	public Vet findOwner(@PathVariable(name = "vetId", required = false) Integer vetId) {
-		return vetId == null ? new Vet() : this.vets.findById(vetId).isPresent() ? this.vets.findById(vetId).get() : null;
+		return vetId == null ? new Vet()
+				: this.vets.findById(vetId).isPresent() ? this.vets.findById(vetId).get() : null;
 	}
 
 	@GetMapping("/vets.html")
