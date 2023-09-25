@@ -41,7 +41,7 @@ import jakarta.persistence.Table;
  * @author Sam Brannen
  */
 @Entity
-@Table(name = "mascotas")
+@Table(name = "pets")
 public class Pet extends NamedEntity {
 
 	@Column(name = "birth_date")
