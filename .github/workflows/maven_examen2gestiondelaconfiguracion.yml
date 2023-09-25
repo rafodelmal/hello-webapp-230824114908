@@ -51,3 +51,5 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EDC0C5C3034B4AE597ACE3F1DE4A5F69 }}
           package: '*.jar'
+        continue-on-error: true # Esta línea permite que el flujo continúe en caso de error
+
