@@ -24,6 +24,10 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
+      - name: Intentionally Fail Test
+        run: echo "Test failed" && exit 1
+        if: always()  # This step will always run and intentionally fail
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
@@ -51,3 +55,4 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EDC0C5C3034B4AE597ACE3F1DE4A5F69 }}
           package: '*.jar'
+
