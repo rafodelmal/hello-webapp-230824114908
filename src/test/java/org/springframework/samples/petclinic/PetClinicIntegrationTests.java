@@ -56,11 +56,11 @@ public class PetClinicIntegrationTests {
 		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 
-	@Test
-    void testExample() {
-		assertThat(1).isEqualTo(2);
-        // Con esto fallara la prueuba y se detendra el pipeline
-    }
+	// @Test
+    // void testExample() {
+	// 	assertThat(1).isEqualTo(2);
+    //     // Con esto fallara la prueuba y se detendra el pipeline
+    // }
 
 	public static void main(String[] args) {
 		SpringApplication.run(PetClinicApplication.class, args);
