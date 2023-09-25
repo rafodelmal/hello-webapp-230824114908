@@ -52,20 +52,3 @@ jobs:
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EDC0C5C3034B4AE597ACE3F1DE4A5F69 }}
           package: '*.jar'
         continue-on-error: true
-
-      - name: Check Deployment Status
-        run: |
-          if [[ ${{ steps.deploy-to-webapp.outcome }} == 'failure' ]]; then
-            echo "Deployment to Azure Web App failed."
-          else
-            echo "Deployment to Azure Web App was successful."
-          fi
-
-      - name: Perform Additional Actions
-        run: |
-          if [[ ${{ steps.deploy-to-webapp.outcome }} == 'failure' ]]; then
-            # Realiza acciones adicionales en caso de fallo, si es necesario
-            # Esto podría incluir notificaciones, ajustes de estado, etc.
-          else
-            # Realiza acciones en caso de éxito, si es necesario
-          fi
