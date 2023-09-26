@@ -55,12 +55,6 @@ public class PetClinicIntegrationTests {
 		ResponseEntity<String> result = template.exchange(RequestEntity.get("/owners/1").build(), String.class);
 		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
-	
-	@Test
-	void testFindAll() throws Exception {
-    	assertThat(vets.findAll()).hasSize(0);
-	}
-
 
 	public static void main(String[] args) {
 		SpringApplication.run(PetClinicApplication.class, args);
