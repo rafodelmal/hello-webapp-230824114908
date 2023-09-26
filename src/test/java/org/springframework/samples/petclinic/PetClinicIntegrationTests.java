@@ -56,12 +56,6 @@ public class PetClinicIntegrationTests {
 		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 
-	@Test
-    void testExample() {
-        // Esta aserción fallará intencionalmente
-        assertThat(1).isEqualTo(2);
-    }
-
 	public static void main(String[] args) {
 		SpringApplication.run(PetClinicApplication.class, args);
 	}
