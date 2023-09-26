@@ -55,13 +55,6 @@ public class PetClinicIntegrationTests {
 		ResponseEntity<String> result = template.exchange(RequestEntity.get("/owners/1").build(), String.class);
 		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
-	
-	@Disabled
-	@Test
-	void testExample() {
-    	// Esta aserción fallará intencionalmente
-    	assertThat(1).isEqualTo(2);
-	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(PetClinicApplication.class, args);

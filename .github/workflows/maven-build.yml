@@ -27,10 +27,3 @@ jobs:
           cache: maven
       - name: Build with Maven Wrapper
         run: ./mvnw -B package
-      
-      - name: Build with Maven
-        run: |
-          mvn clean install || true  # Continúa incluso si la compilación falla
-      
-      - name: Build with Maven
-        run: mvn clean install -DskipTests  # -DskipTests omite la ejecución de pruebas
