@@ -26,13 +26,7 @@ jobs:
           # Este es un script que intencionalmente fallará el build
           echo "Simulando un error en el build..."
           exit 1
-
-      - name: Build with Maven Wrapper
-        run: ./mvnw -B package
-
-      # - name: Build with Maven
-        # run: mvn clean install
-        # continue-on-error: true  # Continuar incluso si esta etapa falla
+        continue-on-error: true  # Continuar incluso si esta etapa falla
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -45,7 +39,6 @@ jobs:
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     
     steps:
       - name: Download artifact from build job
@@ -61,4 +54,5 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EDC0C5C3034B4AE597ACE3F1DE4A5F69 }}
           package: '*.jar'
+
 
