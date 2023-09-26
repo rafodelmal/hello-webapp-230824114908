@@ -51,9 +51,9 @@ public class PetClinicIntegrationTests {
 
 	@Test
 	void testOwnerDetails() {
-		RestTemplate template = builder.rootUri("http://localhost:" + port).build();
-		ResponseEntity<String> result = template.exchange(RequestEntity.get("/owners/1").build(), String.class);
-		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+    	RestTemplate template = builder.rootUri("http://localhost:" + port).build();
+    	ResponseEntity<String> result = template.exchange(RequestEntity.get("/owners/1").build(), String.class);
+    	assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND); // Hacer que falle cambiando el HttpStatus esperado
 	}
 
 	public static void main(String[] args) {
