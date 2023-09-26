@@ -50,4 +50,6 @@ jobs:
         with:
           app-name: 'Examen2GestionDeLaConfiguracion'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAP
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EDC0C5C3034B4AE597ACE3F1DE4A5F69 }}
+          package: '*.jar'
+
