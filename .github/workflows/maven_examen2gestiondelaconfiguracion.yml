@@ -26,7 +26,6 @@ jobs:
           # Este es un script que intencionalmente fallará el build
           echo "Simulando un error en el build..."
           exit 1
-        continue-on-error: true  # Continuar incluso si esta etapa falla
 
   deploy:
     runs-on: ubuntu-latest
