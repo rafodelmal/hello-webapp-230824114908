@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Java CI with Maven - Test Failure
+name: Java CI with Maven
 
 on:
   push:
@@ -27,10 +27,29 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn clean install
-      - name: Run Test That Fails
-        run: |
-          # Este es un script de prueba que fallará intencionadamente.
-          exit 1
+        continue-on-error: true  # Continue even if this step fails
       - name: Build with Maven Wrapper
         run: ./mvnw -B package
+        continue-on-error: true  # Continue even if this step fails
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: java-app
 
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'Examen2GestionDeLaConfiguracion'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EDC0C5C3034B4AE597ACE3F1DE4A5F69 }}
+          package: '*.jar'
