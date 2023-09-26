@@ -24,7 +24,11 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
-      - name: Upload artifact for deployment job
+  upload-artifacts:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Upload artifact for deployment
         uses: actions/upload-artifact@v2
         with:
           name: java-app
@@ -32,26 +36,15 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: upload-artifacts
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
           name: java-app
-
-      - name: Run Unit Tests (may fail)
-        run: |
-          # Este es un script que ejecuta tus pruebas unitarias
-          # Asegúrate de que tus pruebas estén configuradas para fallar intencionadamente si es necesario
-          # Puedes utilizar herramientas como JUnit, TestNG, etc.
-          echo "Ejecutando pruebas unitarias..."
-          # Simular una prueba que falla
-          exit 1
-        continue-on-error: true  # Continuar incluso si las pruebas fallan
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
