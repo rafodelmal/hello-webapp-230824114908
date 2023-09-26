@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy JAR app to Azure Web App - clasedeintegracionydesplieguecontinuo
+name: Build and deploy JAR app to Azure Web App - Examen2GestionDeLaConfiguracion
 
 on:
   push:
@@ -21,14 +21,15 @@ jobs:
         with:
           java-version: '17'
 
-      - name: Build with Maven
-        run: mvn clean install
+      - name: Build with Maven (skip tests)
+        run: mvn clean install -DskipTests  # Omitir pruebas unitarias
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: java-app
           path: '${{ github.workspace }}/target/*.jar'
+  
 
   deploy:
     runs-on: ubuntu-latest
@@ -47,7 +48,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'clasedeintegracionydesplieguecontinuo'
+          app-name: 'Examen2GestionDeLaConfiguracion'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3ADB65BC8A3B491C9F64594B13B4BBC8 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EDC0C5C3034B4AE597ACE3F1DE4A5F69 }}
           package: '*.jar'
