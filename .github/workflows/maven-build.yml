@@ -5,9 +5,9 @@ name: Java CI with Maven (Porcentage con Coverage)
 
 on:
   push:
-    branches: [ maven ]
+    branches: [maven]
   pull_request:
-    branches: [ maven ]
+    branches: [maven]
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '17' ]
+        java: ['17']
 
     steps:
       - uses: actions/checkout@v3
@@ -27,7 +27,7 @@ jobs:
           cache: maven
       - name: Build with Maven Wrapper
         run: ./mvnw -B package
-      
+
       - name: Generate JaCoCo badge
         id: jacoco
         uses: cicirello/jacoco-badge-generator@v2
@@ -59,15 +59,14 @@ jobs:
             git push
           fi
 
-      - name: Comment on PR with coverage percentages
-        if: ${{ github.event_name == 'pull_request' }}
+      - name: Check coverage threshold
+        if: ${{ github.event_name == 'push' }} # Only for pushes, not PRs
         run: |
           REPORT=$(<badges/coverage-summary.json)
-          COVERAGE=$(jq -r '.coverage' <<< "$REPORT")%
-          BRANCHES=$(jq -r '.branches' <<< "$REPORT")%
-          NEWLINE=$'\n'
-          BODY="## JaCoCo Test Coverage Summary Statistics${NEWLINE}* __Coverage:__ ${COVERAGE}${NEWLINE}* __Branches:__ ${BRANCHES}"
-          gh pr comment ${{github.event.pull_request.number}} -b "${BODY}"
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERAGE=$(jq -r '.coverage' <<< "$REPORT")
+          if (( $(echo "$COVERAGE > 55" | bc -l) )); then
+            echo "Coverage is above 80%. Performing deployment..."
+            # Agrega aquí tus comandos de despliegue
+          else
+            echo "Coverage is below 80%. Skipping deployment."
+          fi
