@@ -5,9 +5,9 @@ name: Java CI with Maven (Porcentage con Coverage)
 
 on:
   push:
-    branches: [maven]
+    branches: [ maven ]
   pull_request:
-    branches: [maven]
+    branches: [ maven ]
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: ['17']
+        java: [ '17' ]
 
     steps:
       - uses: actions/checkout@v3
@@ -27,7 +27,7 @@ jobs:
           cache: maven
       - name: Build with Maven Wrapper
         run: ./mvnw -B package
-
+      
       - name: Generate JaCoCo badge
         id: jacoco
         uses: cicirello/jacoco-badge-generator@v2
@@ -59,37 +59,23 @@ jobs:
             git push
           fi
 
-      - name: Check coverage threshold
-        if: ${{ github.event_name == 'push' }}
+      - name: Check coverage percentage 50%
         run: |
-          REPORT=$(<badges/coverage-summary.json)
-          COVERAGE=$(jq -r '.coverage' <<< "$REPORT")
-          if (( $(echo "$COVERAGE > 50" | bc -l) )); then
-            echo "Coverage is above 50%. Performing deployment..."
-            # Agrega aquí tus comandos de despliegue
-          else
-            echo "Coverage is below 50%. Skipping deployment."
-          fi
-          
-
-      - name: Check coverage threshold before deployment
-        id: check-coverage
-        run: |
-          REPORT=$(<java-app/target/site/jacoco/coverage-summary.json)
-          COVERAGE=$(jq -r '.coverage' <<< "$REPORT")
-          if (( $(echo "$COVERAGE >= 50" | bc -l) )); then
-            echo "Coverage is above or equal to 50%. Proceeding with deployment..."
-          else
-            echo "Coverage is below 50%. Skipping deployment."
+          COVERAGE=$(echo "${{ steps.jacoco.outputs.coverage }}" | tr -d '%')
+          if [ "$COVERAGE" -lt 50 ]; then
+            echo "Code coverage is below 50%, setting workflow status to failure."
             exit 1
           fi
 
-      - name: Deploy to Azure Web App
-        if: ${{ steps.check-coverage.outcome == 'success' }}
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'Examen2GestionDeLaConfiguracion'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_37BB14F9CC434698B042A34D7A02B9FC }}
-          package: '*.jar'
+      - name: Comment on PR with coverage percentages
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          REPORT=$(<badges/coverage-summary.json)
+          COVERAGE=$(jq -r '.coverage' <<< "$REPORT")%
+          BRANCHES=$(jq -r '.branches' <<< "$REPORT")%
+          NEWLINE=$'\n'
+          BODY="## JaCoCo Test Coverage Summary Statistics${NEWLINE}* __Coverage:__ ${COVERAGE}${NEWLINE}* __Branches:__ ${BRANCHES}"
+          gh pr comment ${{github.event.pull_request.number}} -b "${BODY}"
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
