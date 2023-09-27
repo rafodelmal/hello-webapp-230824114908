@@ -64,9 +64,44 @@ jobs:
         run: |
           REPORT=$(<badges/coverage-summary.json)
           COVERAGE=$(jq -r '.coverage' <<< "$REPORT")
-          if (( $(echo "$COVERAGE > 55" | bc -l) )); then
+          if (( $(echo "$COVERAGE > 80" | bc -l) )); then
             echo "Coverage is above 80%. Performing deployment..."
             # Agrega aquí tus comandos de despliegue
           else
             echo "Coverage is below 80%. Skipping deployment."
           fi
+          
+    deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: java-app
+
+      - name: Check coverage threshold before deployment
+        id: check-coverage
+        run: |
+          REPORT=$(<java-app/target/site/jacoco/coverage-summary.json)
+          COVERAGE=$(jq -r '.coverage' <<< "$REPORT")
+          if (( $(echo "$COVERAGE >= 80" | bc -l) )); then
+            echo "Coverage is above or equal to 80%. Proceeding with deployment..."
+          else
+            echo "Coverage is below 80%. Skipping deployment."
+            exit 1
+          fi
+
+      - name: Deploy to Azure Web App
+        if: ${{ steps.check-coverage.outcome == 'success' }}
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'Examen2GestionDeLaConfiguracion'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_37BB14F9CC434698B042A34D7A02B9FC }}
+          package: '*.jar'
