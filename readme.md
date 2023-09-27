@@ -31,3 +31,5 @@
   3. maven-build.yml
   
   > Pero solo usaremos los dos primeros
+
+  > Listo, ahora toca abrir el archivo **fallaYContinua.yml** al abrir este archivo nos encontraremos que es el mismo codigo de que el archivo **main-build.yml** pero con la excepción que al final abra un codigo que 
