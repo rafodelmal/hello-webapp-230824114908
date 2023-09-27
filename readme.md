@@ -31,5 +31,3 @@
   3. maven-build.yml
   
   > Pero solo usaremos los dos primeros
-
-> > [Link de la aplicación](https://examen2gestiondelaconfiguracion.azurewebsites.net/)
