@@ -1,0 +1,28 @@
+name: Subir imagen de Docker a ACR
+
+on:
+  push:
+    branches:
+      - maven
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v2
+
+      - name: Iniciar sesión en Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Construir imagen de Docker
+        run: |
+          docker build -t myacr.azurecr.io/myimage:${{ github.run_number }} .
+          docker login myacr.azurecr.io -u myacr -p ${{ secrets.ACR_PASSWORD }}
+          docker push myacr.azurecr.io/myimage:${{ github.run_number }}
+
+      - name: Limpiar credenciales de Docker
+        run: docker logout
