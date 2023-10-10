@@ -1,0 +1,26 @@
+name: Docker Build and Push to ACR
+
+on:
+  push:
+    branches:
+      - maven
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t kalichhe/petclinic .
+        
+      - name: Push to Docker Hub
+        run: docker push kalichhe/petclinic
+
+      - name: Login to Azure Container Registry
+        run: az acr login --name gestiondelaconfiguracion
+
+      - name: Push to Azure Container Registry
+        run: docker push gestiondelaconfiguracion.azurecr.io/kalichhe/petclinic
