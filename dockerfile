@@ -1,7 +1,8 @@
 
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY target/elprofenosmiente-68.jar .
+COPY . /app
 EXPOSE 8080
 COPY . .
+ENV NAME World
 CMD ["java", "-jar", "elprofenosmiente-68.jar"]
