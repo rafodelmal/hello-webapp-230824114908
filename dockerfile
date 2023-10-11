@@ -4,5 +4,4 @@ WORKDIR /app
 COPY . /app
 EXPOSE 8080
 COPY . .
-ENV NAME World
 CMD ["java", "-jar", "elprofenosmiente-68.jar"]
