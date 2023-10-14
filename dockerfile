@@ -1,12 +1,8 @@
-# Utiliza una imagen base de Java
-FROM openjdk:11
-
-# Copia la aplicación de PetClinic a la imagen
-COPY target/elprofenosmiente-68.jar /app/elprofenosmiente-68.jar
-
-# Expone el puerto en el que la aplicación escuchará
+FROM eclipse-temurin:17-jdk-jammy 
+WORKDIR /app 
+COPY .mvn/ .mvn 
+COPY mvnw pom.xml ./ 
+RUN ./mvnw dependency:resolve 
+COPY src ./src 
 EXPOSE 8080
-
-# Comando para ejecutar la aplicación
-CMD ["java", "-jar", "/app/elprofenosmiente-68.jar"]
-
+CMD ["./mvnw", "spring-boot:run"]
