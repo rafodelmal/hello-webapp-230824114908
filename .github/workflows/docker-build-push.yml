@@ -23,5 +23,5 @@ jobs:
 
       - name: Push Docker image to Azure Container Registry
         run: |
-            docker tag kalichhe/petclinic:latest gestiondelaconfiguracion.azurecr.io/kalichhe/petclinic:${{ github.sha }}
+            docker tag kalichhe/petclinic gestiondelaconfiguracion.azurecr.io/kalichhe/petclinic:${{ github.sha }}
             docker push gestiondelaconfiguracion.azurecr.io/kalichhe/petclinic:${{ github.sha }}
