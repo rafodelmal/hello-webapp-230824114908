@@ -12,6 +12,6 @@ jobs:
         run: echo "::set-output name=version::${{ github.run_number }}"
       - name: Build and push the Image
         run: |
-          docker login --username gestiondelaconfiguracion --password ${{ secrets.REGISTRY_PASSWORD }} gestiondelaconfiguracion.azurecr.io
+          docker login --username kalichhe --password 1001154064carloslopez1 gestiondelaconfiguracion.azurecr.io
           docker build . --tag gestiondelaconfiguracion.azurecr.io/kalichhe/petclinic:${{ steps.version.outputs.version }}
           docker push gestiondelaconfiguracion.azurecr.io/kalichhe/petclinic:${{ steps.version.outputs.version }}
