@@ -1,27 +1,17 @@
-name: Push to Azure Container Registry
-on:
-  push:
-    branches:
-      - maven
+name: Docker Image GHCR CI
 
+on:
+  push
 jobs:
-  push-to-azure-container-registry:
+  build_and_publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@main
-
-      - name: Login to Azure Container Registry
-        uses: azure/docker-login@v1
-        with:
-          login-server: gestiondelaconfiguracion.azurecr.io
-          username: gestiondelaconfiguracion
-          password: ylnRhlkS6NUXcFH9R2XjwoOHk5wsL4UgGzWHO467JA+ACRADXcGr
-
-      - name: Build Docker image
-        run: docker-compose build
-
-      - name: Push Docker image to Azure Container Registry
+      - uses: actions/checkout@v3
+      - name: Generate version number
+        id: version
+        run: echo "::set-output name=version::${{ github.run_number }}"
+      - name: Build and push the Image
         run: |
-            docker tag kalichhe/petclinic gestiondelaconfiguracion.azurecr.io/kalichhe/petclinic:${{ github.sha }}
-            docker push gestiondelaconfiguracion.azurecr.io/kalichhe/petclinic:${{ github.sha }}
+          docker login --username gestiondelaconfiguracion --password ${{ secrets.REGISTRY_PASSWORD }} gestiondelaconfiguracion.azurecr.io
+          docker build . --tag gestiondelaconfiguracion.azurecr.io/kalichhe/petclinic:${{ steps.version.outputs.version }}
+          docker push gestiondelaconfiguracion.azurecr.io/kalichhe/petclinic:${{ steps.version.outputs.version }}
