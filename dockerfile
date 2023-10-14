@@ -1,7 +1,8 @@
-
-FROM openjdk:17-jdk-slim
-WORKDIR /app
-COPY target/elprofenosmiente-68.jar .
+FROM eclipse-temurin:17-jdk-jammy 
+WORKDIR /app 
+COPY .mvn/ .mvn 
+COPY mvnw pom.xml ./ 
+RUN ./mvnw dependency:resolve 
+COPY src ./src 
 EXPOSE 8080
-COPY . .
-CMD ["java", "-jar", "elprofenosmiente-68.jar"]
+CMD ["./mvnw", "spring-boot:run"]
