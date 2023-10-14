@@ -15,3 +15,4 @@ jobs:
           docker login --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }} gestiondelaconfiguracion.azurecr.io
           docker build . --tag gestiondelaconfiguracion.azurecr.io/kalichhe/petclinic:${{ steps.version.outputs.version }}
           docker push gestiondelaconfiguracion.azurecr.io/kalichhe/petclinic:${{ steps.version.outputs.version }}
+          
