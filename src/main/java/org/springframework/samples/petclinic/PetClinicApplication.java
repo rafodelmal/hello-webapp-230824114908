@@ -19,6 +19,10 @@ package org.springframework.samples.petclinic;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportRuntimeHints;
+import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.security.keyvault.secrets.SecretClient;
+import com.azure.security.keyvault.secrets.SecretClientBuilder;
+import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
 
 /**
  * PetClinic Spring Boot Application.
@@ -33,5 +37,19 @@ public class PetClinicApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PetClinicApplication.class, args);
 	}
+
+	String kvUri = "https://final20232.vault.azure.net";
+
+	SecretClient secretClient = new SecretClientBuilder()
+        .vaultUrl(kvUri)
+        .credential(new DefaultAzureCredentialBuilder().build())
+        .buildClient();
+
+	KeyVaultSecret databaseUserSecret = secretClient.getSecret("petclinic");
+	String databaseUser = databaseUserSecret.getValue();
+
+	KeyVaultSecret databasePasswordSecret = secretClient.getSecret("petclinic");
+	String databasePassword = databasePasswordSecret.getValue();
+
 
 }
