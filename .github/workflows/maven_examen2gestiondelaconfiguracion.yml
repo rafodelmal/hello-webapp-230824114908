@@ -47,7 +47,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'Examen2GestionDeLaConfiguracion'
+          app-name: 'gestiondelaconfiguracion'
           slot-name: 'Production'
           package: '*.jar'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E8FFAC0854BA4C0CADFAD4E06D58A7D1 }}
