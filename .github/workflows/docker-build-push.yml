@@ -1,0 +1,17 @@
+name: Docker Image 
+
+on:
+  push
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Generate version number
+        id: version
+        run: echo "::set-output name=version::${{ github.run_number }}"
+      - name: Build and push the Image
+        run: |
+          docker login --username gestiondelaconfiguracion --password ${{ secrets.REGISTRY_PASSWORD }} gestiondelaconfiguracion.azurecr.io
+          docker build . --tag gestiondelaconfiguracion.azurecr.io/kalichhe/petclinic:${{ steps.version.outputs.version }}
+          docker push gestiondelaconfiguracion.azurecr.io/kalichhe/petclinic:${{ steps.version.outputs.version }}
