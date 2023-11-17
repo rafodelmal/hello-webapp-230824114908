@@ -6,7 +6,7 @@ name: Java CI with Maven (Porcentage con Coverage)
 on:
   push:
     branches: [ maven ]
-  pull_request:
+  pull_request: 
     branches: [ maven ]
 
 jobs:
